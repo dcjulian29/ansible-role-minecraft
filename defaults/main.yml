@@ -1,0 +1,61 @@
+---
+minecraft_bedrock: false
+minecraft_bedrock_version: '1.19.81.01'
+minecraft_data: "/opt/{{ minecraft_name }}"
+minecraft_group: minecraft
+minecraft_name: "minecraft_{{ ansible_hostname }}"
+minecraft_paper: false
+minecraft_spigot: false
+minecraft_version: '1.19.4'
+minecraft_volumes: []
+minecraft_user: minecraft
+
+# ops.json
+minecraft_ops:
+  - uuid: "1eeb3f81-7354-451d-b764-ae42e5c2fc81"
+    name: "dcjulian29"
+    level: 4
+
+# server.properties
+minecraft_allow_nether: true
+minecraft_commandblocks: false
+minecraft_debug: false
+minecraft_difficulty: 'easy'
+minecraft_gamemode: 'survival'
+minecraft_gamemode_force: false
+minecraft_hardcore: false
+minecraft_maxtick: 60000
+minecraft_motd: 'A Minecraft Server'
+minecraft_online: true
+minecraft_players: 20
+minecraft_pvp: true
+minecraft_resource_pack: ''
+minecraft_resource_pack_require: false
+minecraft_resource_pack_sha1: ''
+minecraft_spawn_npcs: true
+minecraft_spawn_animals: true
+minecraft_spawn_monsters: true
+minecraft_whitelist: false
+minecraft_whitelist_enforce: false
+minecraft_view_distance: 10
+minecraft_world_size: 29999984
+
+# bukkit.yml
+minecraft_allow_end: true
+minecraft_permissions_file: 'permissions.yml'
+minecraft_shutdown_message: 'Server closed'
+minecraft_spawn_limits_monsters: 70
+minecraft_spawn_limits_animals: 10
+minecraft_spawn_limits_water_animals: 5
+minecraft_spawn_limits_water_ambient: 20
+minecraft_spawn_limits_ambient: 15
+
+# paper.yml
+minecraft_anti_xray: false
+minecraft_paper_verbose: false
+
+# spigot.yml
+minecraft_spigot_verbose: false
+
+# Both paper.yml and spigot.yml
+minecraft_bungee_online: false

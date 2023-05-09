@@ -1,0 +1,12 @@
+---
+- name: Remove minecraft
+  ansible.builtin.command: "docker rm {{ minecraft_name }}"
+  register: results
+  failed_when: >-
+    results is failed and
+    "No such container" not in results.stderr | default(false)
+  changed_when: >-
+    'No such container' not in results.stderr | default(false)
+
+- name: Restart minecraft
+  ansible.builtin.command: "docker restart {{ minecraft_name }}"

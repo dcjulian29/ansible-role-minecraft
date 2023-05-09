@@ -1,0 +1,23 @@
+[Unit]
+Description=Bedrock Server
+
+Wants=network.target
+After=network.target
+
+[Service]
+User=minecraft
+Group=minecraft
+KillMode=process
+SuccessExitStatus=0 1
+
+ProtectHome=true
+ProtectSystem=full
+PrivateDevices=true
+NoNewPrivileges=true
+PrivateTmp=true
+ReadWriteDirectories={{ minecraft_data_dir }}/{{ minecraft_name }}
+WorkingDirectory={{ minecraft_data_dir }}/{{ minecraft_name }}
+ExecStart={{ minecraft_data_dir }}/{{ minecraft_name }}/bedrock_server
+
+[Install]
+WantedBy=multi-user.target

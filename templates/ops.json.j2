@@ -1,0 +1,11 @@
+[
+{% for user in minecraft_ops %}
+  {
+    "uuid": "{{ user.uuid }}",
+    "name": "{{ user.name }}",
+    "level": "{{ user.level }}",
+    "bypassesPlayerLimit": false
+  }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+]

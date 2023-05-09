@@ -1,0 +1,30 @@
+settings:
+  minimum-api: none
+  allow-end: {{ minecraft_allow_end }}
+  warn-on-overload: true
+  permissions-file: {{ minecraft_permissions_file }}
+  update-folder: update
+  plugin-profiling: false
+  connection-throttle: 4000
+  query-plugins: true
+  deprecated-verbose: default
+  shutdown-message: {{ minecraft_shutdown_message }}
+  ping-packet-limit: 100
+  use-exact-login-location: false
+spawn-limits:
+  water-ambient: {{ minecraft_spawn_limits_water_ambient }}
+  monsters: {{ minecraft_spawn_limits_monsters }}
+  animals: {{ minecraft_spawn_limits_animals }}
+  water-animals: {{ minecraft_spawn_limits_water_animals }}
+  ambient: {{ minecraft_spawn_limits_ambient }}
+chunk-gc:
+  period-in-ticks: 600
+  load-threshold: 0
+ticks-per:
+  water-ambient-spawns: 1
+  water-spawns: 1
+  ambient-spawns: 1
+  animal-spawns: 400
+  monster-spawns: 1
+  autosave: 6000
+aliases: now-in-commands.yml

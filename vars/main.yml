@@ -1,0 +1,37 @@
+---
+vanilla_volumes:
+  - "/etc/localtime:/etc/localtime:ro"
+  - "{{ minecraft_data }}/banned-ips.json:/minecraft/banned-ips.json"
+  - "{{ minecraft_data }}/banned-players.json:/minecraft/banned-players.json"
+  - "{{ minecraft_data }}/ops.json:/minecraft/ops.json"
+  - "{{ minecraft_data }}/server.properties:/minecraft/server.properties:ro"
+  - "{{ minecraft_data }}/whitelist.json:/minecraft/whitelist.json"
+  - "{{ minecraft_data }}/logs:/minecraft/logs"
+  - "{{ minecraft_data }}/world:/minecraft/world"
+
+spigot_volumes:
+  - "/etc/localtime:/etc/localtime:ro"
+  - "{{ minecraft_data }}/nether:/minecraft/world_nether"
+  - "{{ minecraft_data }}/the_end:/minecraft/world_the_end"
+  - "{{ minecraft_data }}/dynmap:/minecraft/plugins/dynmap/web/tiles"
+  - "{{ minecraft_data }}/bukkit.yml:/minecraft/bukkit.yml"
+  - "{{ minecraft_data }}/spigot.yml:/minecraft/spigot.yml"
+  - "{{ minecraft_data }}/worlds.yml:/minecraft/plugins/Multiverse-Core/worlds.yml"
+  - "{{ minecraft_data }}/portals.yml:/minecraft/plugins/Multiverse-Portals/portals.yml"
+  - "{{ minecraft_data }}/worldedit.log:/minecraft/plugins/WorldEdit/worldedit.log"
+
+paper_volumes:
+  - "/etc/localtime:/etc/localtime:ro"
+  - "{{ minecraft_data }}/nether:/minecraft/world_nether"
+  - "{{ minecraft_data }}/the_end:/minecraft/world_the_end"
+  - "{{ minecraft_data }}/dynmap:/minecraft/plugins/dynmap/web/tiles"
+  - "{{ minecraft_data }}/bukkit.yml:/minecraft/bukkit.yml"
+  - "{{ minecraft_data }}/spigot.yml:/minecraft/spigot.yml"
+  - "{{ minecraft_data }}/paper.yml:/minecraft/paper.yml"
+  - "{{ minecraft_data }}/worlds.yml:/minecraft/plugins/Multiverse-Core/worlds.yml"
+  - "{{ minecraft_data }}/portals.yml:/minecraft/plugins/Multiverse-Portals/portals.yml"
+  - "{{ minecraft_data }}/worldedit.log:/minecraft/plugins/WorldEdit/worldedit.log"
+
+bedrock_volumes:
+  - "/etc/localtime:/etc/localtime:ro"
+  - "{{ minecraft_data }}/worlds:/minecraft/worlds"

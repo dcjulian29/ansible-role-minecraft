@@ -1,0 +1,219 @@
+---
+- name: Create minecraft system group
+  ansible.builtin.group:
+    name: "{{ minecraft_group }}"
+    state: present
+    system: true
+
+- name: Create minecraft system user
+  ansible.builtin.user:
+    name: "{{ minecraft_user }}"
+    group: "{{ minecraft_group }}"
+    groups: docker
+    home: "{{ minecraft_data }}"
+    create_home: false
+    shell: /bin/false
+    state: present
+    system: true
+
+- name: Ensure Docker image is vanilla flavor
+  ansible.builtin.set_fact:
+    docker_image: "dcjulian29/minecraft:{{ minecraft_version }}"
+  when:
+    - not minecraft_bedrock
+    - not minecraft_paper
+    - not minecraft_spigot
+
+- name: Ensure Docker image is spigot flavor
+  ansible.builtin.set_fact:
+    docker_image: "dcjulian29/minecraft:{{ minecraft_version }}-spigot"
+  when: minecraft_spigot
+
+- name: Ensure Docker image is paper flavor
+  ansible.builtin.set_fact:
+    docker_image: "dcjulian29/minecraft:{{ minecraft_version }}-paper"
+  when: minecraft_paper
+
+- name: Ensure Docker image is bedrock flavor
+  ansible.builtin.set_fact:
+    docker_image: "dcjulian29/bedrock:{{ minecraft_bedrock_version }}"
+  when: minecraft_bedrock
+
+- name: Pull Minecraft docker image
+  community.docker.docker_image:
+    name: "{{ docker_image }}"
+    source: pull
+  notify: Remove minecraft
+
+- name: Ensure all handlers run before continuing
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure Minecraft folder exists
+  ansible.builtin.file:
+    access_time: preserve
+    group: "{{ minecraft_group }}"
+    mode: "0755"
+    modification_time: preserve
+    owner: "{{ minecraft_user }}"
+    path: "{{ minecraft_data }}"
+    state: directory
+
+- name: Ensure banned-ips.json is configured
+  ansible.builtin.template:
+    dest: "{{ minecraft_data }}/banned-ips.json"
+    group: "{{ minecraft_group }}"
+    mode: "0640"
+    owner: "{{ minecraft_user }}"
+    src: banned-ips.json.j2
+  when: not minecraft_bedrock
+  notify: Restart minecraft
+
+- name: Ensure banned-players.json is configured
+  ansible.builtin.template:
+    dest: "{{ minecraft_data }}/banned-players.json"
+    group: "{{ minecraft_group }}"
+    mode: "0640"
+    owner: "{{ minecraft_user }}"
+    src: banned-players.json.j2
+  when: not minecraft_bedrock
+  notify: Restart minecraft
+
+- name: Ensure bukkit.yml is configured if applicable
+  ansible.builtin.template:
+    dest: "{{ minecraft_data }}/bukkit.yml"
+    group: "{{ minecraft_group }}"
+    mode: "0640"
+    owner: "{{ minecraft_user }}"
+    src: bukkit.yml.j2
+  when:
+    - minecraft_spigot or minecraft_paper
+    - not minecraft_bedrock
+  notify: Restart minecraft
+
+- name: Ensure ops.json is configured
+  ansible.builtin.template:
+    dest: "{{ minecraft_data }}/ops.json"
+    group: "{{ minecraft_group }}"
+    mode: "0640"
+    owner: "{{ minecraft_user }}"
+    src: ops.json.j2
+  when: not minecraft_bedrock
+  notify: Restart minecraft
+
+- name: Ensure paper.yml is configured if applicable
+  ansible.builtin.template:
+    dest: "{{ minecraft_data }}/paper.yml"
+    group: "{{ minecraft_group }}"
+    mode: "0640"
+    owner: "{{ minecraft_user }}"
+    src: paper.yml.j2
+  when:
+    - minecraft_paper
+    - not minecraft_bedrock
+  notify: Restart minecraft
+
+- name: Ensure server.properties is configured
+  ansible.builtin.template:
+    dest: "{{ minecraft_data }}/server.properties"
+    group: "{{ minecraft_group }}"
+    mode: "0640"
+    owner: "{{ minecraft_user }}"
+    src: server.properties.j2
+  when: not minecraft_bedrock
+  notify: Restart minecraft
+
+- name: Ensure spigot.yml is configured if applicable
+  ansible.builtin.template:
+    dest: "{{ minecraft_data }}/spigot.yml"
+    group: "{{ minecraft_group }}"
+    mode: "0640"
+    owner: "{{ minecraft_user }}"
+    src: spigot.yml.j2
+  when:
+    - minecraft_spigot or minecraft_paper
+    - not minecraft_bedrock
+  notify: Restart minecraft
+
+- name: Ensure whitelist.json is configured
+  ansible.builtin.template:
+    dest: "{{ minecraft_data }}/whitelist.json"
+    group: "{{ minecraft_group }}"
+    mode: "0640"
+    owner: "{{ minecraft_user }}"
+    src: whitelist.json.j2
+  when: not minecraft_bedrock
+  notify: Restart minecraft
+
+- name: Ensure Docker volumes to mount are vanilla flavor
+  ansible.builtin.set_fact:
+    docker_volumes: "{{ vanilla_volumes + minecraft_volumes }}"
+  when:
+    - not minecraft_bedrock
+    - not minecraft_paper
+    - not minecraft_spigot
+
+- name: Ensure Docker volumes to mount are spigot flavor
+  ansible.builtin.set_fact:
+    docker_volumes: "{{ vanilla_volumes + spigot_volumes + minecraft_volumes }}"
+  when: minecraft_spigot
+
+- name: Ensure Docker volumes to mount are paper flavor
+  ansible.builtin.set_fact:
+    docker_volumes: "{{ vanilla_volumes + paper_volumes + minecraft_volumes }}"
+  when: minecraft_paper
+
+- name: Ensure Docker volumes to mount are bedrock flavor
+  ansible.builtin.set_fact:
+    docker_volumes: "{{ bedrock_volumes }}"
+  when: minecraft_bedrock
+
+- name: Determine how much memory to give Minecraft
+  ansible.builtin.set_fact:
+    minecraft_memory: "{{ (ansible_memory_mb.real.total * 0.8) | round | int }}"
+
+- name: Determine ports to give Minecraft for vanilla flavor
+  ansible.builtin.set_fact:
+    minecraft_port:
+      - "25565:25565"
+  when:
+    - not minecraft_bedrock
+    - not minecraft_paper
+    - not minecraft_spigot
+
+- name: Determine ports to give Minecraft for paper and spigot flavors
+  ansible.builtin.set_fact:
+    minecraft_port:
+      - "8123:8123"
+      - "25565:25565"
+      - "19132:19132/udp"
+  when: minecraft_spigot or minecraft_paper
+
+- name: Determine ports to give Minecraft for vanilla flavor
+  ansible.builtin.set_fact:
+    minecraft_port:
+      - "19132:19132/udp"
+  when: minecraft_bedrock
+
+- name: Ensure Minecraft container is created and running
+  community.docker.docker_container:
+    container_default_behavior: compatibility
+    detach: true
+    env:
+      TZ: "{{ ansible_date_time.tz }}"
+    image: "{{ docker_image }}"
+    interactive: false
+    memory: "{{ minecraft_memory }}m"
+    memory_reservation: "{{ minecraft_memory }}m"
+    memory_swap: 0
+    memory_swappiness: 0
+    name: "{{ minecraft_name }}"
+    ports: "{{ minecraft_port }}"
+    restart_policy: always
+    security_opts:
+      - no-new-privileges:true
+    state: present
+    volumes: "{{ docker_volumes }}"
+  notify: Restart minecraft
+
+- name: Force all notified handlers to run at this point
+  ansible.builtin.meta: flush_handlers
