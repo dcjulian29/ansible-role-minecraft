@@ -1,6 +1,6 @@
 settings:
-  minimum-api: none
-  allow-end: {{ minecraft_allow_end }}
+  minimum-api: {{ minecraft_minimum_api_version }}
+  allow-end: {{ minecraft_allow_end | to_json }}
   warn-on-overload: true
   permissions-file: {{ minecraft_permissions_file }}
   update-folder: update
@@ -18,13 +18,13 @@ spawn-limits:
   water-animals: {{ minecraft_spawn_limits_water_animals }}
   ambient: {{ minecraft_spawn_limits_ambient }}
 chunk-gc:
-  period-in-ticks: 600
+  period-in-ticks: {{ minecraft_chunk_gc_period_in_tick }}
   load-threshold: 0
 ticks-per:
   water-ambient-spawns: 1
   water-spawns: 1
   ambient-spawns: 1
   animal-spawns: 400
-  monster-spawns: 1
+  monster-spawns: {{ minecraft_ticks_per_monster_spawns }}
   autosave: 6000
 aliases: now-in-commands.yml

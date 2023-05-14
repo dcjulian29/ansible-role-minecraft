@@ -1,11 +1,11 @@
 config-version: 12
 settings:
-  debug: {{ minecraft_spigot_verbose }}
-  bungeecord: {{ minecraft_bungee_online }}
+  debug: {{ minecraft_spigot_verbose | to_json }}
+  bungeecord: {{ minecraft_bungee_online | to_json }}
   sample-count: 12
   player-shuffle: 0
   user-cache-size: 1000
-  save-user-cache-on-stop-only: false
+  save-user-cache-on-stop-only: {{ minecraft_save_user_cache_on_stop_only | to_json }}
   moved-wrongly-threshold: 0.0625
   moved-too-quickly-multiplier: 10.0
   log-villager-deaths: true
@@ -50,7 +50,7 @@ stats:
   forced-stats: {}
 world-settings:
   default:
-    verbose: {{ minecraft_spigot_verbose }}
+    verbose: {{ minecraft_spigot_verbose | to_json }}
     hopper-amount: 1
     dragon-death-sound-radius: 0
     seed-village: 10387312
@@ -71,20 +71,20 @@ world-settings:
     seed-portal: 34222645
     max-tnt-per-tick: 100
     enable-zombie-pigmen-portal-spawns: true
-    item-despawn-rate: 6000
+    item-despawn-rate: {{ minecraft_item_despawn_rate }}
     view-distance: default
     wither-spawn-sound-radius: 0
-    arrow-despawn-rate: 1200
+    arrow-despawn-rate: {{ minecraft_arrow_despawn_rate }}
     trident-despawn-rate: 1200
     hanging-tick-frequency: 100
     zombie-aggressive-towards-villager: true
-    nerf-spawner-mobs: false
-    mob-spawn-range: 8
+    nerf-spawner-mobs: {{ minecraft_nerf_spawner_mobs | to_json }}
+    mob-spawn-range: {{ minecraft_mob_spawn_range }}
     end-portal-sound-radius: 0
     max-entity-collisions: 8
     merge-radius:
-      exp: 3.0
-      item: 2.5
+      exp: {{ minecraft_merge_radius_exp }}
+      item: {{ minecraft_merge_radius_item }}
     growth:
       cactus-modifier: 100
       cane-modifier: 100
@@ -103,17 +103,17 @@ world-settings:
       sweetberry-modifier: 100
       kelp-modifier: 100
     entity-activation-range:
-      animals: 32
-      monsters: 32
-      raiders: 48
-      misc: 16
+      animals: {{ minecraft_entity_activation_range_animals }}
+      monsters: {{ minecraft_entity_activation_range_monsters }}
+      raiders: {{ minecraft_entity_activation_range_raiders }}
+      misc: {{ minecraft_entity_activation_range_misc }}
       water: 16
       villagers: 32
       flying-monsters: 32
       villagers-work-immunity-after: 100
       villagers-work-immunity-for: 20
       villagers-active-for-panic: true
-      tick-inactive-villagers: true
+      tick-inactive-villagers: {{ minecraft_tick_inactive_villagers | to_json }}
       wake-up-inactive:
         animals-max-per-tick: 4
         animals-every: 1200
@@ -139,8 +139,8 @@ world-settings:
       sprint-multiplier: 0.1
       other-multiplier: 0.0
     max-tick-time:
-      tile: 50
-      entity: 50
+      tile: {{ minecraft_max_tick_time_tile }}
+      entity: {{ minecraft_max_tick_time_entity }}
     squid-spawn-range:
       min: 45.0
     entity-tracking-range:

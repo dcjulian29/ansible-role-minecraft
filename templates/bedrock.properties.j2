@@ -1,10 +1,10 @@
 server-name={{ minecraft_motd }}
 gamemode={{ minecraft_gamemode }}
-force-gamemode={{ minecraft_gamemode_force }}
+force-gamemode={{ minecraft_gamemode_force | to_json }}
 difficulty={{ minecraft_difficulty }}
 allow-cheats=false
 max-players={{ minecraft_players }}
-online-mode={{ minecraft_online }}
+online-mode={{ minecraft_online | to_json }}
 white-list={{ minecraft_whitelist }}
 server-port=19132
 server-portv6=19133

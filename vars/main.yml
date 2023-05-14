@@ -10,27 +10,14 @@ vanilla_volumes:
   - "{{ minecraft_data }}/world:/minecraft/world"
 
 spigot_volumes:
-  - "/etc/localtime:/etc/localtime:ro"
+  - "{{ minecraft_data }}/plugins:/minecraft/plugins"
   - "{{ minecraft_data }}/nether:/minecraft/world_nether"
   - "{{ minecraft_data }}/the_end:/minecraft/world_the_end"
-  - "{{ minecraft_data }}/dynmap:/minecraft/plugins/dynmap/web/tiles"
   - "{{ minecraft_data }}/bukkit.yml:/minecraft/bukkit.yml"
   - "{{ minecraft_data }}/spigot.yml:/minecraft/spigot.yml"
-  - "{{ minecraft_data }}/worlds.yml:/minecraft/plugins/Multiverse-Core/worlds.yml"
-  - "{{ minecraft_data }}/portals.yml:/minecraft/plugins/Multiverse-Portals/portals.yml"
-  - "{{ minecraft_data }}/worldedit.log:/minecraft/plugins/WorldEdit/worldedit.log"
 
 paper_volumes:
-  - "/etc/localtime:/etc/localtime:ro"
-  - "{{ minecraft_data }}/nether:/minecraft/world_nether"
-  - "{{ minecraft_data }}/the_end:/minecraft/world_the_end"
-  - "{{ minecraft_data }}/dynmap:/minecraft/plugins/dynmap/web/tiles"
-  - "{{ minecraft_data }}/bukkit.yml:/minecraft/bukkit.yml"
-  - "{{ minecraft_data }}/spigot.yml:/minecraft/spigot.yml"
-  - "{{ minecraft_data }}/paper.yml:/minecraft/paper.yml"
-  - "{{ minecraft_data }}/worlds.yml:/minecraft/plugins/Multiverse-Core/worlds.yml"
-  - "{{ minecraft_data }}/portals.yml:/minecraft/plugins/Multiverse-Portals/portals.yml"
-  - "{{ minecraft_data }}/worldedit.log:/minecraft/plugins/WorldEdit/worldedit.log"
+  - "{{ minecraft_data }}/config:/minecraft/config"
 
 bedrock_volumes:
   - "/etc/localtime:/etc/localtime:ro"

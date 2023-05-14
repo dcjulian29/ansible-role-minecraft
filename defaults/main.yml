@@ -5,16 +5,17 @@ minecraft_data: "/opt/{{ minecraft_name }}"
 minecraft_group: minecraft
 minecraft_name: "minecraft_{{ ansible_hostname }}"
 minecraft_paper: false
+minecraft_plugins: []
+# -  https://mediafiles.forgecdn.net/files/3934/649/Dynmap-3.4-spigot.jar
 minecraft_spigot: false
 minecraft_version: '1.19.4'
 minecraft_volumes: []
-minecraft_user: minecraft
 
 # ops.json
-minecraft_ops:
-  - uuid: "1eeb3f81-7354-451d-b764-ae42e5c2fc81"
-    name: "dcjulian29"
-    level: 4
+minecraft_ops: []
+  # - uuid: "e27a660a-ec95-4f76-8d43-684c852b13ce"
+  #   name: "player"
+  #   level: 4
 
 # server.properties
 minecraft_allow_nether: true
@@ -42,20 +43,56 @@ minecraft_world_size: 29999984
 
 # bukkit.yml
 minecraft_allow_end: true
+minecraft_chunk_gc_period_in_tick: 400
+minecraft_minimum_api_version: 1.13
 minecraft_permissions_file: 'permissions.yml'
 minecraft_shutdown_message: 'Server closed'
-minecraft_spawn_limits_monsters: 70
-minecraft_spawn_limits_animals: 10
-minecraft_spawn_limits_water_animals: 5
-minecraft_spawn_limits_water_ambient: 20
-minecraft_spawn_limits_ambient: 15
+minecraft_spawn_limits_ambient: 1
+minecraft_spawn_limits_animals: 8
+minecraft_spawn_limits_monsters: 50
+minecraft_spawn_limits_water_ambient: 2
+minecraft_spawn_limits_water_animals: 3
+minecraft_ticks_per_monster_spawns: 4
 
 # paper.yml
+minecraft_alt_item_despawn_rate_enabled: true
+minecraft_alt_item_despawn_rate_cobblestone: 60
 minecraft_anti_xray: false
+minecraft_armor_stand_tick: false
+minecraft_container_update_tick_rate: 3
+minecraft_despawn_rate_hard: 96
+minecraft_despawn_rate_soft: 28
+minecraft_disable_chest_cat_detection: true
+minecraft_grass_spread_tick_rate: 4
+minecraft_hopper_disable_move_event: true
+minecraft_max_auto_save_chunks_per_tick: 8
+minecraft_max_entity_collisions: 2
+minecraft_mob_spawner_tick_rate: 2
+minecraft_optimize_explosions: true
 minecraft_paper_verbose: false
+minecraft_per_player_mod_spawns: true
+minecraft_prevent_moving_into_unloaded_chunks: true
+minecraft_redstone_implementation: eigencraft     # vanilla, eigencraft, alternate-current
+minecraft_velocity_enabled: false
+minecraft_velocity_online: false
+minecraft_velocity_secret: ""
 
 # spigot.yml
+minecraft_entity_activation_range_animals: 16
+minecraft_entity_activation_range_monsters: 24
+minecraft_entity_activation_range_raiders: 48
+minecraft_entity_activation_range_misc: 8
+minecraft_item_despawn_rate: 4000
+minecraft_max_tick_time_tile: 1000
+minecraft_max_tick_time_entity: 1000
+minecraft_mob_spawn_range: 6
+minecraft_merge_radius_exp: 4.0
+minecraft_merge_radius_item: 6.0
+minecraft_nerf_spawner_mobs: true
+minecraft_save_user_cache_on_stop_only: true
 minecraft_spigot_verbose: false
+minecraft_tick_inactive_villagers: false
 
 # Both paper.yml and spigot.yml
+minecraft_arrow_despawn_rate: 60
 minecraft_bungee_online: false
