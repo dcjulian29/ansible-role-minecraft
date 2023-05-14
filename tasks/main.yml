@@ -147,7 +147,7 @@
   notify: Restart minecraft
 
 - name: Ensure plugin folder exists.
-  file:
+  ansible.builtin.file:
     access_time: preserve
     group: root
     mode: "0750"
@@ -158,7 +158,7 @@
   when: minecraft_spigot or minecraft_paper
 
 - name: Ensure Plugins are installed.
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ item }}"
     dest: '{{ minecraft_data }}/plugins/'
     owner: root

@@ -13,9 +13,9 @@ minecraft_volumes: []
 
 # ops.json
 minecraft_ops: []
-  # - uuid: "e27a660a-ec95-4f76-8d43-684c852b13ce"
-  #   name: "player"
-  #   level: 4
+# - uuid: "e27a660a-ec95-4f76-8d43-684c852b13ce"
+#   name: "player"
+#   level: 4
 
 # server.properties
 minecraft_allow_nether: true
