@@ -39,6 +39,7 @@ minecraft_spawn_monsters: true
 minecraft_whitelist: false
 minecraft_whitelist_enforce: false
 minecraft_view_distance: 10
+minecraft_world_seed: ""
 minecraft_world_size: 29999984
 
 # bukkit.yml
