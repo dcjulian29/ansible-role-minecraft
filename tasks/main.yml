@@ -1,4 +1,19 @@
 ---
+- name: Ensure Mincraft group is present
+  ansible.builtin.group:
+    name: "{{ minecraft_group }}"
+    gid: "{{ minecraft_gid }}"
+    state: present
+
+- name: Ensure Minecraft user is present
+  ansible.builtin.user:
+    create_home: false
+    group: "{{ minecraft_group }}"
+    name: "{{ minecraft_user }}"
+    shell: /sbin/nologin
+    system: true
+    uid: "{{ minecraft_uid }}"
+
 - name: Ensure Docker image is vanilla flavor
   ansible.builtin.set_fact:
     docker_image: "dcjulian29/minecraft:{{ minecraft_version }}"
@@ -34,19 +49,19 @@
 - name: Ensure Minecraft folder exists
   ansible.builtin.file:
     access_time: preserve
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0750"
     modification_time: preserve
-    owner: root
+    owner: "{{ minecraft_user }}"
     path: "{{ minecraft_data }}"
     state: directory
 
 - name: Ensure banned-ips.json is configured
   ansible.builtin.template:
     dest: "{{ minecraft_data }}/banned-ips.json"
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0640"
-    owner: root
+    owner: "{{ minecraft_user }}"
     src: banned-ips.json.j2
   when: not minecraft_bedrock
   notify: Restart minecraft
@@ -54,9 +69,9 @@
 - name: Ensure banned-players.json is configured
   ansible.builtin.template:
     dest: "{{ minecraft_data }}/banned-players.json"
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0640"
-    owner: root
+    owner: "{{ minecraft_user }}"
     src: banned-players.json.j2
   when: not minecraft_bedrock
   notify: Restart minecraft
@@ -64,9 +79,9 @@
 - name: Ensure bukkit.yml is configured if applicable
   ansible.builtin.template:
     dest: "{{ minecraft_data }}/bukkit.yml"
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0640"
-    owner: root
+    owner: "{{ minecraft_user }}"
     src: bukkit.yml.j2
   when:
     - minecraft_spigot or minecraft_paper
@@ -76,9 +91,9 @@
 - name: Ensure ops.json is configured
   ansible.builtin.template:
     dest: "{{ minecraft_data }}/ops.json"
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0640"
-    owner: root
+    owner: "{{ minecraft_user }}"
     src: ops.json.j2
   when: not minecraft_bedrock
   notify: Restart minecraft
@@ -86,9 +101,9 @@
 - name: Ensure server.properties is configured
   ansible.builtin.template:
     dest: "{{ minecraft_data }}/server.properties"
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0640"
-    owner: root
+    owner: "{{ minecraft_user }}"
     src: server.properties.j2
   when: not minecraft_bedrock
   notify: Restart minecraft
@@ -96,9 +111,9 @@
 - name: Ensure whitelist.json is configured
   ansible.builtin.template:
     dest: "{{ minecraft_data }}/whitelist.json"
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0640"
-    owner: root
+    owner: "{{ minecraft_user }}"
     src: whitelist.json.j2
   when: not minecraft_bedrock
   notify: Restart minecraft
@@ -106,9 +121,9 @@
 - name: Ensure spigot.yml is configured if applicable
   ansible.builtin.template:
     dest: "{{ minecraft_data }}/spigot.yml"
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0640"
-    owner: root
+    owner: "{{ minecraft_user }}"
     src: spigot.yml.j2
   when:
     - minecraft_spigot or minecraft_paper
@@ -118,10 +133,10 @@
 - name: Ensure Minecraft Paper configuration folder exists
   ansible.builtin.file:
     access_time: preserve
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0750"
     modification_time: preserve
-    owner: root
+    owner: "{{ minecraft_user }}"
     path: "{{ minecraft_data }}/config"
     state: directory
   when: minecraft_paper
@@ -129,9 +144,9 @@
 - name: Ensure paper-global.yml is configured if applicable
   ansible.builtin.template:
     dest: "{{ minecraft_data }}/config/paper-global.yml"
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0640"
-    owner: root
+    owner: "{{ minecraft_user }}"
     src: paper-global.yml.j2
   when: minecraft_paper
   notify: Restart minecraft
@@ -139,9 +154,9 @@
 - name: Ensure paper-world-defaults.yml is configured if applicable
   ansible.builtin.template:
     dest: "{{ minecraft_data }}/config/paper-world-defaults.yml"
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0640"
-    owner: root
+    owner: "{{ minecraft_user }}"
     src: paper-world-defaults.yml.j2
   when: minecraft_paper
   notify: Restart minecraft
@@ -149,10 +164,10 @@
 - name: Ensure plugin folder exists.
   ansible.builtin.file:
     access_time: preserve
-    group: root
+    group: "{{ minecraft_group }}"
     mode: "0750"
     modification_time: preserve
-    owner: root
+    owner: "{{ minecraft_user }}"
     path: "{{ minecraft_data }}/plugins"
     state: directory
   when: minecraft_spigot or minecraft_paper
@@ -161,8 +176,8 @@
   ansible.builtin.get_url:
     url: "{{ item }}"
     dest: '{{ minecraft_data }}/plugins/'
-    owner: root
-    group: root
+    owner: "{{ minecraft_user }}"
+    group: "{{ minecraft_group }}"
     mode: "0640"
   with_items: "{{ minecraft_plugins }}"
   when: minecraft_spigot or minecraft_paper
@@ -221,6 +236,9 @@
   community.docker.docker_container:
     container_default_behavior: compatibility
     detach: true
+    env:
+      PUID: "{{ minecraft_uid | quote }}"
+      PGID: "{{ minecraft_gid | quote }}"
     image: "{{ docker_image }}"
     interactive: false
     memory: "{{ minecraft_memory }}m"
