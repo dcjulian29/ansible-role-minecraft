@@ -4,7 +4,7 @@ vanilla_volumes:
   - "{{ minecraft_data }}/banned-ips.json:/minecraft/banned-ips.json"
   - "{{ minecraft_data }}/banned-players.json:/minecraft/banned-players.json"
   - "{{ minecraft_data }}/ops.json:/minecraft/ops.json"
-  - "{{ minecraft_data }}/server.properties:/minecraft/server.properties:ro"
+  - "{{ minecraft_data }}/server.properties:/minecraft/server.properties"
   - "{{ minecraft_data }}/whitelist.json:/minecraft/whitelist.json"
   - "{{ minecraft_data }}/logs:/minecraft/logs"
   - "{{ minecraft_data }}/world:/minecraft/world"
