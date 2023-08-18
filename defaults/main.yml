@@ -34,7 +34,7 @@ minecraft_entity_broadcast_range_percentage: 100
 minecraft_gamemode: 'survival'
 minecraft_gamemode_force: false
 minecraft_generate_structures: true
-minecraft_generator_settings: {}
+minecraft_generator_settings: { }
 minecraft_hardcore: false
 minecraft_maxtick: 60000
 minecraft_motd: 'A Minecraft Server'
