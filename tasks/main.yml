@@ -57,22 +57,22 @@
     state: directory
 
 - name: Ensure banned-ips.json is configured
-  ansible.builtin.template:
+  ansible.builtin.copy:
+    content: "{{ minecraft_banned_ips | to_json }}"
     dest: "{{ minecraft_data }}/banned-ips.json"
     group: "{{ minecraft_group }}"
     mode: "0640"
     owner: "{{ minecraft_user }}"
-    src: banned-ips.json.j2
   when: not minecraft_bedrock
   notify: Restart minecraft
 
 - name: Ensure banned-players.json is configured
-  ansible.builtin.template:
+  ansible.builtin.copy:
+    content: "{{ minecraft_banned_players | to_json }}"
     dest: "{{ minecraft_data }}/banned-players.json"
     group: "{{ minecraft_group }}"
     mode: "0640"
     owner: "{{ minecraft_user }}"
-    src: banned-players.json.j2
   when: not minecraft_bedrock
   notify: Restart minecraft
 
@@ -109,12 +109,12 @@
   notify: Restart minecraft
 
 - name: Ensure whitelist.json is configured
-  ansible.builtin.template:
+  ansible.builtin.copy:
+    content: "{{ minecraft_whitelist | to_json }}"
     dest: "{{ minecraft_data }}/whitelist.json"
     group: "{{ minecraft_group }}"
     mode: "0640"
     owner: "{{ minecraft_user }}"
-    src: whitelist.json.j2
   when: not minecraft_bedrock
   notify: Restart minecraft
 

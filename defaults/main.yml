@@ -1,4 +1,6 @@
 ---
+minecraft_banned_ips: []
+minecraft_banned_players: []
 minecraft_bedrock: false
 minecraft_bedrock_version: '1.19.81.01'
 minecraft_data: "/opt/{{ minecraft_name }}"
@@ -11,8 +13,9 @@ minecraft_plugins: []
 minecraft_spigot: false
 minecraft_uid: 889
 minecraft_user: minecraft
-minecraft_version: '1.19.4'
+minecraft_version: '1.20.1'
 minecraft_volumes: []
+minecraft_whitelist: []
 
 # ops.json
 minecraft_ops: []
@@ -21,29 +24,42 @@ minecraft_ops: []
 #   level: 4
 
 # server.properties
+minecraft_allow_flight: false
 minecraft_allow_nether: true
 minecraft_commandblocks: false
 minecraft_debug: false
 minecraft_difficulty: 'easy'
+minecraft_enforce_secure_profile: true
+minecraft_entity_broadcast_range_percentage: 100
 minecraft_gamemode: 'survival'
 minecraft_gamemode_force: false
+minecraft_generate_structures: true
+minecraft_generator_settings: {}
 minecraft_hardcore: false
 minecraft_maxtick: 60000
 minecraft_motd: 'A Minecraft Server'
 minecraft_online: true
 minecraft_players: 20
+minecraft_player_idle_timeout: 0
 minecraft_pvp: true
 minecraft_resource_pack: ''
+minecraft_resource_pack_prompt: ""
 minecraft_resource_pack_require: false
 minecraft_resource_pack_sha1: ''
 minecraft_spawn_npcs: true
 minecraft_spawn_animals: true
 minecraft_spawn_monsters: true
-minecraft_whitelist: false
+minecraft_spawn_protection: 16
 minecraft_whitelist_enforce: false
 minecraft_view_distance: 10
 minecraft_world_seed: ""
 minecraft_world_size: 29999984
+# minecraft:normal - Standard world with hills, valleys, water, etc.
+# minecraft:flat - A flat world with no features.
+# minecraft:large_biomes - Same as default but all biomes are larger.
+# minecraft:amplified - Same as default but world-generation height limit is increased.
+# minecraft:single_biome_surface - A buffet world which the entire overworld consists of one biome.
+minecraft_world_type: "minecraft:normal"
 
 # bukkit.yml
 minecraft_allow_end: true

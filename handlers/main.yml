@@ -1,6 +1,6 @@
 ---
 - name: Remove minecraft
-  ansible.builtin.command: "docker rm {{ minecraft_name }}"
+  ansible.builtin.command: "docker rm --force {{ minecraft_name }}"
   register: results
   failed_when: >-
     results is failed and
