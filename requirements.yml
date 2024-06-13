@@ -1,5 +1,5 @@
 ---
-collections: 
+collections:
    - community.docker
 roles:
 - name: dcjulian29.docker
