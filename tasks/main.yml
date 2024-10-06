@@ -18,27 +18,16 @@
   ansible.builtin.set_fact:
     docker_image: "dcjulian29/minecraft:{{ minecraft_version }}"
   when:
-    - not minecraft_bedrock
     - not minecraft_paper
-    - not minecraft_spigot
-
-- name: Ensure Docker image is spigot flavor
-  ansible.builtin.set_fact:
-    docker_image: "dcjulian29/minecraft:{{ minecraft_version }}-spigot"
-  when: minecraft_spigot
 
 - name: Ensure Docker image is paper flavor
   ansible.builtin.set_fact:
     docker_image: "dcjulian29/minecraft:{{ minecraft_version }}-paper"
   when: minecraft_paper
 
-- name: Ensure Docker image is bedrock flavor
-  ansible.builtin.set_fact:
-    docker_image: "dcjulian29/bedrock:{{ minecraft_bedrock_version }}"
-  when: minecraft_bedrock
-
 - name: Pull Minecraft docker image
   community.docker.docker_image:
+    force_source: true
     name: "{{ docker_image }}"
     source: pull
   notify: Remove minecraft
@@ -63,7 +52,6 @@
     group: "{{ minecraft_group }}"
     mode: "0640"
     owner: "{{ minecraft_user }}"
-  when: not minecraft_bedrock
   notify: Restart minecraft
 
 - name: Ensure banned-players.json is configured
@@ -73,19 +61,6 @@
     group: "{{ minecraft_group }}"
     mode: "0640"
     owner: "{{ minecraft_user }}"
-  when: not minecraft_bedrock
-  notify: Restart minecraft
-
-- name: Ensure bukkit.yml is configured if applicable
-  ansible.builtin.template:
-    dest: "{{ minecraft_data }}/bukkit.yml"
-    group: "{{ minecraft_group }}"
-    mode: "0640"
-    owner: "{{ minecraft_user }}"
-    src: bukkit.yml.j2
-  when:
-    - minecraft_spigot or minecraft_paper
-    - not minecraft_bedrock
   notify: Restart minecraft
 
 - name: Ensure ops.json is configured
@@ -95,7 +70,6 @@
     mode: "0640"
     owner: "{{ minecraft_user }}"
     src: ops.json.j2
-  when: not minecraft_bedrock
   notify: Restart minecraft
 
 - name: Ensure server.properties is configured
@@ -105,7 +79,6 @@
     mode: "0640"
     owner: "{{ minecraft_user }}"
     src: server.properties.j2
-  when: not minecraft_bedrock
   notify: Restart minecraft
 
 - name: Ensure whitelist.json is configured
@@ -115,7 +88,16 @@
     group: "{{ minecraft_group }}"
     mode: "0640"
     owner: "{{ minecraft_user }}"
-  when: not minecraft_bedrock
+  notify: Restart minecraft
+
+- name: Ensure bukkit.yml is configured if applicable
+  ansible.builtin.template:
+    dest: "{{ minecraft_data }}/bukkit.yml"
+    group: "{{ minecraft_group }}"
+    mode: "0640"
+    owner: "{{ minecraft_user }}"
+    src: bukkit.yml.j2
+  when: minecraft_paper
   notify: Restart minecraft
 
 - name: Ensure spigot.yml is configured if applicable
@@ -125,9 +107,7 @@
     mode: "0640"
     owner: "{{ minecraft_user }}"
     src: spigot.yml.j2
-  when:
-    - minecraft_spigot or minecraft_paper
-    - not minecraft_bedrock
+  when: minecraft_paper
   notify: Restart minecraft
 
 - name: Ensure Minecraft Paper configuration folder exists
@@ -170,7 +150,7 @@
     owner: "{{ minecraft_user }}"
     path: "{{ minecraft_data }}/plugins"
     state: directory
-  when: minecraft_spigot or minecraft_paper
+  when: minecraft_paper
 
 - name: Ensure Plugins are installed.
   ansible.builtin.get_url:
@@ -180,30 +160,17 @@
     group: "{{ minecraft_group }}"
     mode: "0640"
   with_items: "{{ minecraft_plugins }}"
-  when: minecraft_spigot or minecraft_paper
+  when: minecraft_paper
 
 - name: Ensure Docker volumes to mount are vanilla flavor
   ansible.builtin.set_fact:
     docker_volumes: "{{ vanilla_volumes + minecraft_volumes }}"
-  when:
-    - not minecraft_bedrock
-    - not minecraft_paper
-    - not minecraft_spigot
-
-- name: Ensure Docker volumes to mount are spigot flavor
-  ansible.builtin.set_fact:
-    docker_volumes: "{{ vanilla_volumes + spigot_volumes + minecraft_volumes }}"
-  when: minecraft_spigot
+  when: not minecraft_paper
 
 - name: Ensure Docker volumes to mount are paper flavor
   ansible.builtin.set_fact:
-    docker_volumes: "{{ vanilla_volumes + spigot_volumes + paper_volumes + minecraft_volumes }}"
+    docker_volumes: "{{ vanilla_volumes + paper_volumes + minecraft_volumes }}"
   when: minecraft_paper
-
-- name: Ensure Docker volumes to mount are bedrock flavor
-  ansible.builtin.set_fact:
-    docker_volumes: "{{ bedrock_volumes }}"
-  when: minecraft_bedrock
 
 - name: Determine how much memory to give Minecraft
   ansible.builtin.set_fact:
@@ -213,24 +180,15 @@
   ansible.builtin.set_fact:
     minecraft_port:
       - "25565:25565"
-  when:
-    - not minecraft_bedrock
-    - not minecraft_paper
-    - not minecraft_spigot
+  when: not minecraft_paper
 
-- name: Determine ports to give Minecraft for paper and spigot flavors
+- name: Determine ports to give Minecraft for paper flavors
   ansible.builtin.set_fact:
     minecraft_port:
       - "8123:8123"
       - "25565:25565"
       - "19132:19132/udp"
-  when: minecraft_spigot or minecraft_paper
-
-- name: Determine ports to give Minecraft for bedrock flavor
-  ansible.builtin.set_fact:
-    minecraft_port:
-      - "19132:19132/udp"
-  when: minecraft_bedrock
+  when: minecraft_paper
 
 - name: Ensure Minecraft container is created
   community.docker.docker_container:

@@ -1,19 +1,15 @@
 ---
 minecraft_banned_ips: []
 minecraft_banned_players: []
-minecraft_bedrock: false
-minecraft_bedrock_version: '1.19.81.01'
 minecraft_data: "/opt/{{ minecraft_name }}"
 minecraft_gid: 889
 minecraft_group: minecraft
 minecraft_name: "minecraft_{{ ansible_hostname }}"
 minecraft_paper: false
 minecraft_plugins: []
-# -  https://mediafiles.forgecdn.net/files/3934/649/Dynmap-3.4-spigot.jar
-minecraft_spigot: false
 minecraft_uid: 889
 minecraft_user: minecraft
-minecraft_version: '1.20.6'
+minecraft_version: '1.21.1'
 minecraft_volumes: []
 minecraft_whitelist: []
 
@@ -24,7 +20,7 @@ minecraft_ops: []
 #   level: 4
 
 # server.properties
-minecraft_allow_flight: false
+minecraft_allow_fly: false
 minecraft_allow_nether: true
 minecraft_commandblocks: false
 minecraft_debug: false

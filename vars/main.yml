@@ -9,16 +9,10 @@ vanilla_volumes:
   - "{{ minecraft_data }}/logs:/minecraft/logs"
   - "{{ minecraft_data }}/world:/minecraft/world"
 
-spigot_volumes:
+paper_volumes:
+  - "{{ minecraft_data }}/config:/minecraft/config"
   - "{{ minecraft_data }}/plugins:/minecraft/plugins"
   - "{{ minecraft_data }}/nether:/minecraft/world_nether"
   - "{{ minecraft_data }}/the_end:/minecraft/world_the_end"
   - "{{ minecraft_data }}/bukkit.yml:/minecraft/bukkit.yml"
   - "{{ minecraft_data }}/spigot.yml:/minecraft/spigot.yml"
-
-paper_volumes:
-  - "{{ minecraft_data }}/config:/minecraft/config"
-
-bedrock_volumes:
-  - "/etc/localtime:/etc/localtime:ro"
-  - "{{ minecraft_data }}/worlds:/minecraft/worlds"
