@@ -7,6 +7,7 @@ minecraft_group: minecraft
 minecraft_name: "minecraft_{{ ansible_hostname }}"
 minecraft_paper: false
 minecraft_plugins: []
+minecraft_plugins_clear: true
 minecraft_uid: 889
 minecraft_user: minecraft
 minecraft_version: '1.21.1'

@@ -152,7 +152,28 @@
     state: directory
   when: minecraft_paper
 
-- name: Ensure Plugins are installed.
+- name: Find existing plugins to remove
+  find:
+    paths: '{{ minecraft_data }}/plugins/'
+    patterns: "^*.jar"
+    use_regex: true
+  register: plugins_to_delete
+  when:
+    - minecraft_paper
+    - minecraft_plugins | length > 0
+    - minecraft_plugins_clear
+
+- name: Remove exiting plugins
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ plugins_to_delete.files }}"
+  when:
+    - minecraft_paper
+    - minecraft_plugins | length > 0
+    - minecraft_plugins_clear
+
+- name: Ensure Plugins are installed
   ansible.builtin.get_url:
     url: "{{ item }}"
     dest: '{{ minecraft_data }}/plugins/'
@@ -160,7 +181,9 @@
     group: "{{ minecraft_group }}"
     mode: "0640"
   with_items: "{{ minecraft_plugins }}"
-  when: minecraft_paper
+  when:
+    - minecraft_paper
+    - minecraft_plugins | length > 0
 
 - name: Ensure Docker volumes to mount are vanilla flavor
   ansible.builtin.set_fact:
