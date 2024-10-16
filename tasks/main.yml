@@ -153,7 +153,7 @@
   when: minecraft_paper
 
 - name: Find existing plugins to remove
-  find:
+  ansible.builtin.find:
     paths: '{{ minecraft_data }}/plugins/'
     patterns: "^*.jar"
     use_regex: true
@@ -164,7 +164,7 @@
     - minecraft_plugins_clear
 
 - name: Remove exiting plugins
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: absent
   with_items: "{{ plugins_to_delete.files }}"
