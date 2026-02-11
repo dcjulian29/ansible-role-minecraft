@@ -197,7 +197,7 @@
 
 - name: Determine how much memory to give Minecraft
   ansible.builtin.set_fact:
-    minecraft_memory: "{{ (ansible_memory_mb.real.total * 0.8) | round | int }}"
+    minecraft_memory: "{{ (ansible_facts['memory_mb'].real.total * 0.8) | round | int }}"
 
 - name: Determine ports to give Minecraft for vanilla flavor
   ansible.builtin.set_fact:

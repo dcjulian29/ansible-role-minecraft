@@ -4,7 +4,7 @@ minecraft_banned_players: []
 minecraft_data: "/opt/{{ minecraft_name }}"
 minecraft_gid: 889
 minecraft_group: minecraft
-minecraft_name: "minecraft_{{ ansible_hostname }}"
+minecraft_name: "minecraft_{{ ansible_facts['hostname'] }}"
 minecraft_paper: false
 minecraft_plugins: []
 minecraft_plugins_clear: true
